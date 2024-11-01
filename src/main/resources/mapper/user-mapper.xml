@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nowcoder.community.dao.UserMapper">   <!-- namespace 写对应的UserMapper -->
+    <!-- 内部写各种标签，写对应的sql方法！ -->
+    <sql id="selectFields">
+        id,username,password,salt,email,type,status,activation_code,header_url,create_time
+    </sql>
+    <!-- 对应数据库中的属性，不是java类中的属性！！！！！  插入的时候没有 id !!!!!!!-->
+    <sql id="insertFields">
+        username,password,salt,email,type,status,activation_code,header_url,create_time
+    </sql>
+    <!-- 对应方法名，以及返回类型名字 -->
+    <!-- mybatis.type-aliases-package=com.nowcoder.community.entity  这里已经设置了对应路径 -->
+    <!-- #{id} 引入对应方法的 parameter -->
+    <select id="selectById" resultType="User">
+        select <include refid="selectFields"></include>
+        from user
+        where id = #{id}
+    </select>
+
+    <select id="selectByName" resultType="User">
+        select <include refid="selectFields"></include>
+        from user
+        where username = #{username}
+    </select>
+
+    <select id="selectByEmail" resultType="User">
+        select <include refid="selectFields"></include>
+        from user
+        where email = #{email}
+    </select>
+    <insert id="insertUser" parameterType="User" keyProperty="id">
+        insert into user (<include refid="insertFields"></include>)
+        values(#{username}, #{password}, #{salt}, #{email}, #{type}, #{status}, #{activationCode}, #{headerUrl}, #{createTime})
+    </insert>
+
+    <!-- java类中的属性！！！！！values-->
+
+    <insert id="updateStatus">
+        update user set status = #{status} where id = #{id}
+    </insert>
+
+    <insert id="updateHeader">
+        update user set header_url = #{headerUrl} where id = #{id}
+    </insert>
+
+    <insert id="updatePassword">
+        update user set password = #{password} where id = #{id}
+    </insert>
+
+
+</mapper>
